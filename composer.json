@@ -1,10 +1,11 @@
 {
-    "name": "proposal-system",
+    "name": "seomidia/meu-plugin",
     "type": "project",
     "require": {
         "php": "^8.1",
-        "laravel/framework": "^10.0",
-        "laravel/breeze": "^2.0"
+        "laravel/framework": "^11.0",
+        "laravel/breeze": "^2.0",
+        "laravel/sanctum": "^4.1"
     },
     "autoload": {
         "psr-4": {
