@@ -3,6 +3,7 @@
 @section('content')
 @include('layouts.partials.page-title', ['title' => 'Admin', 'subtitle' => 'Users'])
 <a href="{{ route('admin.users.create') }}" class="btn btn-primary mb-2">Novo Usuário</a>
+<div class="card">
 <table class="table">
     <thead>
         <tr>
@@ -33,4 +34,5 @@
     </tbody>
 </table>
 {{ $users->links() }}
+</div>
 @endsection

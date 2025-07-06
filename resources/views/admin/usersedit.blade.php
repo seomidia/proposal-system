@@ -2,6 +2,8 @@
 
 @section('content')
 @include('layouts.partials.page-title', ['title' => 'Admin', 'subtitle' => 'Edit User'])
+<div class="card">
+<div class="card-body">
 <form method="POST" action="{{ route('admin.users.update', $user) }}">
     @csrf
     @method('PUT')
@@ -23,4 +25,6 @@
     </div>
     <button type="submit" class="btn btn-primary">Salvar</button>
 </form>
+</div>
+</div>
 @endsection

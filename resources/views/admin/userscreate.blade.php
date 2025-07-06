@@ -2,6 +2,8 @@
 
 @section('content')
 @include('layouts.partials.page-title', ['title' => 'Admin', 'subtitle' => 'Create User'])
+<div class="card">
+
 <form method="POST" action="{{ route('admin.users.store') }}">
     @csrf
     <div class="mb-3">
@@ -22,4 +24,5 @@
     </div>
     <button type="submit" class="btn btn-primary">Salvar</button>
 </form>
+</div>
 @endsection

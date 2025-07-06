@@ -5,6 +5,7 @@
 <form method="GET" class="mb-4">
     <input type="text" name="search" value="{{ request('search') }}" placeholder="Pesquisar" class="form-control w-25" />
 </form>
+<div class="card">
 <table class="table">
     <thead>
         <tr>
@@ -26,4 +27,5 @@
     </tbody>
 </table>
 {{ $proposals->links() }}
+</div>
 @endsection
