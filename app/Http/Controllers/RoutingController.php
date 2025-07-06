@@ -18,7 +18,13 @@ class RoutingController extends Controller
      */
     public function root(Request $request, $first)
     {
-        return view($first);
+        $view = 'pages.' . $first;
+
+        if (! view()->exists($view)) {
+            $view = $first;
+        }
+
+        return view($view);
     }
 
     /**
@@ -27,5 +33,13 @@ class RoutingController extends Controller
     public function secondLevel(Request $request, $first, $second)
     {
         return view($first . '.' . $second);
+    }
+
+    /**
+     * third level route
+     */
+    public function thirdLevel(Request $request, $first, $second, $third)
+    {
+        return view($first . '.' . $second . '.' . $third);
     }
 }
