@@ -29,6 +29,24 @@
                </li>
 
                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.proposals') }}">
+                         <span class="nav-icon">
+                              <iconify-icon icon="solar:file-outline"></iconify-icon>
+                         </span>
+                         <span class="nav-text"> Proposals </span>
+                    </a>
+               </li>
+
+               <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.users.index') }}">
+                         <span class="nav-icon">
+                              <iconify-icon icon="solar:users-group-rounded-outline"></iconify-icon>
+                         </span>
+                         <span class="nav-text"> Users </span>
+                    </a>
+               </li>
+
+               <li class="nav-item">
                     <a class="nav-link menu-arrow" href="#sidebarAuthentication" data-bs-toggle="collapse" role="button"
                          aria-expanded="false" aria-controls="sidebarAuthentication">
                          <span class="nav-icon">
