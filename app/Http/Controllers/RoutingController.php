@@ -32,7 +32,13 @@ class RoutingController extends Controller
      */
     public function secondLevel(Request $request, $first, $second)
     {
-        return view($first . '.' . $second);
+        $view = 'pages.' . $first . '.' . $second;
+
+        if (! view()->exists($view)) {
+            $view = $first . '.' . $second;
+        }
+
+        return view($view);
     }
 
     /**
@@ -40,6 +46,12 @@ class RoutingController extends Controller
      */
     public function thirdLevel(Request $request, $first, $second, $third)
     {
-        return view($first . '.' . $second . '.' . $third);
+        $view = 'pages.' . $first . '.' . $second . '.' . $third;
+
+        if (! view()->exists($view)) {
+            $view = $first . '.' . $second . '.' . $third;
+        }
+
+        return view($view);
     }
 }
