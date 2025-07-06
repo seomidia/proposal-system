@@ -1,0 +1,12 @@
+# Laravel
+/vendor/
+/node_modules/
+/public/storage
+/storage/*.key
+.env
+.phpunit.result.cache
+bootstrap/cache/
+/storage/
+/public/hot
+# IDE
+.idea/
