@@ -11,18 +11,17 @@ class ProposalController extends Controller
     public function index(Request $request)
     {
         $query = Proposal::query();
-
         if ($search = $request->get('search')) {
             $query->where('client_name', 'like', "%{$search}%");
         }
 
         $proposals = $query->latest()->paginate(20);
-        return view('admin.proposals.index', compact('proposals'));
+        return view('admin.proposals', compact('proposals'));
     }
 
     public function edit(Proposal $proposal)
     {
-        return view('admin.proposals.edit', compact('proposal'));
+        return view('admin.proposalsEdit', compact('proposal'));
     }
 
     public function update(Request $request, Proposal $proposal)
@@ -36,6 +35,6 @@ class ProposalController extends Controller
         ]);
 
         $proposal->update($data);
-        return redirect()->route('admin.proposals.index');
+        return redirect()->route('admin.proposals');
     }
 }

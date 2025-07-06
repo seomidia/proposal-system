@@ -20,7 +20,7 @@
                 <td>{{ $proposal->id }}</td>
                 <td>{{ $proposal->client_name }}</td>
                 <td>{{ $proposal->amount }}</td>
-                <td><a href="{{ route('admin.proposals.edit', $proposal) }}">Editar</a></td>
+                <td><a href="{{ route('admin.proposalsEdit', $proposal) }}">Editar</a></td>
             </tr>
         @endforeach
     </tbody>

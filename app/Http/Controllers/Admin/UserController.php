@@ -12,12 +12,12 @@ class UserController extends Controller
     public function index()
     {
         $users = User::paginate(20);
-        return view('admin.users.index', compact('users'));
+        return view('admin.users', compact('users'));
     }
 
     public function create()
     {
-        return view('admin.users.create');
+        return view('admin.userscreate');
     }
 
     public function store(Request $request)
@@ -30,12 +30,12 @@ class UserController extends Controller
         ]);
         $data['password'] = Hash::make($data['password']);
         User::create($data);
-        return redirect()->route('admin.users.index');
+        return redirect()->route('admin.users');
     }
 
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        return view('admin.usersedit', compact('user'));
     }
 
     public function update(Request $request, User $user)
