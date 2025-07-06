@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -57,6 +58,12 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        $loggedIn = DB::table('sessions')->where('user_id', $user->id)->exists();
+
+        if ($loggedIn) {
+            return back()->with('modalError', 'Usuário está logado e não pode ser excluído.');
+        }
+
         $user->delete();
         return back();
     }
