@@ -10,14 +10,15 @@ class Proposal extends Model
     use HasFactory;
 
     protected $fillable = [
-        'kommo_deal_id',
-        'client_name',
-        'client_email',
-        'client_phone',
-        'amount',
-        'due_date',
-        'custom_fields',
-        'proposal_url',
+        'kommo_lead_id',
+        'faturamento_medio_mensal',
+        'faturamento_medio_anual',
+        'quantidade_socios_contrato',
+        'tributacao_federal',
+        'media_declaracoes_ano',
+        'media_lancamentos_mes',
+        'quantos_funcionarios',
+        'proposal_url'
     ];
 
     protected $casts = [

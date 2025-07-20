@@ -10,13 +10,15 @@ return new class extends Migration
     {
         Schema::create('proposals', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('kommo_deal_id')->unique();
+            $table->unsignedBigInteger('kommo_lead_id')->unique();
             $table->string('client_name')->nullable();
-            $table->string('client_email')->nullable();
-            $table->string('client_phone')->nullable();
-            $table->decimal('amount', 10, 2)->nullable();
-            $table->date('due_date')->nullable();
-            $table->json('custom_fields')->nullable();
+            $table->decimal('faturamento_medio_mensal', 10, 2)->nullable();
+            $table->decimal('faturamento_medio_anual', 10, 2)->nullable();
+            $table->integer('quantidade_socios_contrato')->nullable();
+            $table->string('tributacao_federal')->nullable();
+            $table->integer('media_declaracoes_ano')->nullable();
+            $table->integer('media_lancamentos_mes')->nullable();
+            $table->integer('quantos_funcionarios')->nullable();
             $table->string('proposal_url')->nullable();
             $table->timestamps();
         });
