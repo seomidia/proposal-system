@@ -6,7 +6,7 @@ Ele utiliza o parâmetro `proposta` presente na URL da página para definir o ID
 ## Uso
 
 1. Copie a pasta `proposta-plugin` para o diretório `wp-content/plugins` do seu WordPress.
-2. (Opcional) defina a constante `PROPOSTA_API_TOKEN` no `wp-config.php` caso a API exija autenticação JWT.
+2. (Opcional) defina a constante `PROPOSTA_API_TOKEN` no `wp-config.php` caso a API exija autenticação JWT. O token obtido automaticamente pelo plugin é armazenado em um *transient* por uma hora para evitar requisições repetidas.
 3. Ative o plugin no painel de administração.
 4. Utilize os shortcodes abaixo para exibir cada campo da proposta informada na URL:
 
