@@ -22,13 +22,16 @@ class KommoWebhookController extends Controller
 
         $custom_fields =  $leads['custom_fields'];
         $args = [
-                'faturamento_medio_mensal' => (float) $custom_fields[0]['values'][0]['value'] ?? null,
-                'faturamento_medio_anual' => (float) $custom_fields[1]['values'][0]['value'] ?? null,
-                'quantidade_socios_contrato' => (int) $custom_fields[2]['values'][0]['value'] ?? null,
-                'tributacao_federal' => $custom_fields[3]['values'][0]['value'] ?? null,
-                'media_declaracoes_ano' => (int) $custom_fields[4]['values'][0]['value'] ?? null,
-                'media_lancamentos_mes' => (int) $custom_fields[5]['values'][0]['value'] ?? [],
-                'quantos_funcionarios' => (int) $custom_fields[6]['values'][0]['value'],
+                'client_name' =>  $custom_fields[1]['values'][0]['value'] ?? null,
+                'faturamento_medio_mensal' => (float) $custom_fields[2]['values'][0]['value'] ?? null,
+                'faturamento_medio_anual' => (float) $custom_fields[3]['values'][0]['value'] ?? null,
+                'quantidade_socios_contrato' => (int) $custom_fields[4]['values'][0]['value'] ?? null,
+                'tributacao_federal' => $custom_fields[5]['values'][0]['value'] ?? null,
+                'media_declaracoes_ano' => (int) $custom_fields[6]['values'][0]['value'] ?? null,
+                'media_lancamentos_mes' => (int) $custom_fields[7]['values'][0]['value'] ?? [],
+                'quantos_funcionarios' => (int) $custom_fields[8]['values'][0]['value'],
+                'tipo_proposta' =>  $custom_fields[9]['values'][0]['value'],
+                'economia_por_ano' => (int) $custom_fields[10]['values'][0]['value'],
         ];
 
 
