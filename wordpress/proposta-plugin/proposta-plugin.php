@@ -14,34 +14,49 @@ if($sandbox){
 define('PROPOSTA_API_URL',$endpoint);
 
 function getToken(){
+    $token = get_transient('proposta_api_token');
+    if ($token !== false) {
+        return $token;
+    }
 
-$curl = curl_init();
+    $curl = curl_init();
 
-curl_setopt_array($curl, array(
-  CURLOPT_URL => PROPOSTA_API_URL . '/api/token',
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 0,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'POST',
-  CURLOPT_POSTFIELDS =>'{
-  "email": "user@demo.com",
-  "password": "password"
-}',
-  CURLOPT_HTTPHEADER => array(
-    'Content-Type: application/json'
-  ),
-));
+    curl_setopt_array($curl, array(
+      CURLOPT_URL => PROPOSTA_API_URL . '/api/token',
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => '',
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 10,
+      CURLOPT_FOLLOWLOCATION => true,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => 'POST',
+      CURLOPT_POSTFIELDS => json_encode([
+          'email' => 'user@demo.com',
+          'password' => 'password',
+      ]),
+      CURLOPT_HTTPHEADER => array(
+        'Content-Type: application/json'
+      ),
+    ));
 
-$response = json_decode(curl_exec($curl));
+    $raw = curl_exec($curl);
+    if (curl_errno($curl)) {
+        curl_close($curl);
+        return '';
+    }
+    curl_close($curl);
 
-curl_close($curl);
-return $response->token;
+    $response = json_decode($raw);
+    if (isset($response->token)) {
+        set_transient('proposta_api_token', $response->token, HOUR_IN_SECONDS);
+        return $response->token;
+    }
+    return '';
 }
-$token = getToken();
-define('PROPOSTA_API_TOKEN',$token);
+
+if (!defined('PROPOSTA_API_TOKEN')) {
+    define('PROPOSTA_API_TOKEN', getToken());
+}
 
 function proposta_fetch_data() {
     static $cache = null;
@@ -152,21 +167,26 @@ function getPropost($tipo_proposta){
         case 'Assessoria Adicional':
             return 'bloco6';
         break;
+        default:
+            return '';
     }
 }
 
 function jstext()
 {
     $data = proposta_fetch_data();
+    if (!$data) {
+        return;
+    }
     $formatter = new NumberFormatter('pt_BR', NumberFormatter::CURRENCY);
     $proposta = getPropost($data->tipo_proposta);
 
     echo "
         <script>
         setTimeout(function(){
-            jQuery('#nome_empresa h1').text('".$data->client_name."');
-            jQuery('#economiavalor p').text('Economize ".$formatter->formatCurrency($data->economia_por_ano, 'BRL')."/ano');
-            jQuery('.".$proposta."').show();
+            jQuery('#nome_empresa h1').text('".esc_js($data->client_name)."');
+            jQuery('#economiavalor p').text('Economize ".esc_js($formatter->formatCurrency($data->economia_por_ano, 'BRL'))."/ano');
+            jQuery('.".esc_js($proposta)."').show();
         },1000);
         </script>
         <style>
