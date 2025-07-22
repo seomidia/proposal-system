@@ -5,6 +5,44 @@
  * Version: 1.1.0
  */
 
+$sandbox  = true;
+$endpoint = 'https://maxxidoctor.com.br';
+if($sandbox){
+    $endpoint = 'https://f56f794d8927.ngrok-free.app';
+}
+
+define('PROPOSTA_API_URL',$endpoint);
+
+function getToken(){
+
+$curl = curl_init();
+
+curl_setopt_array($curl, array(
+  CURLOPT_URL => PROPOSTA_API_URL . '/api/token',
+  CURLOPT_RETURNTRANSFER => true,
+  CURLOPT_ENCODING => '',
+  CURLOPT_MAXREDIRS => 10,
+  CURLOPT_TIMEOUT => 0,
+  CURLOPT_FOLLOWLOCATION => true,
+  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+  CURLOPT_CUSTOMREQUEST => 'POST',
+  CURLOPT_POSTFIELDS =>'{
+  "email": "user@demo.com",
+  "password": "password"
+}',
+  CURLOPT_HTTPHEADER => array(
+    'Content-Type: application/json'
+  ),
+));
+
+$response = json_decode(curl_exec($curl));
+
+curl_close($curl);
+return $response->token;
+}
+$token = getToken();
+define('PROPOSTA_API_TOKEN',$token);
+
 function proposta_fetch_data() {
     static $cache = null;
     if ($cache !== null) {
@@ -12,16 +50,16 @@ function proposta_fetch_data() {
     }
 
     $id = isset($_GET['proposta']) ? intval($_GET['proposta']) : 0;
+
     if (!$id) {
         return [];
     }
 
-    $api_url = 'https://maxxidoctor.com.br/api/proposals/' . $id;
-    $args = [];
-    if (defined('PROPOSTA_API_TOKEN')) {
-        $args['headers'] = ['Authorization' => 'Bearer ' . PROPOSTA_API_TOKEN];
-    }
 
+    $api_url = PROPOSTA_API_URL . '/api/proposals/' . $id;
+
+    $args = [];
+    $args['headers'] = ['Authorization' => 'Bearer ' . PROPOSTA_API_TOKEN];
     $response = wp_remote_get($api_url, $args);
     if (is_wp_error($response) || wp_remote_retrieve_response_code($response) !== 200) {
         return [];
@@ -34,7 +72,7 @@ function proposta_fetch_data() {
     }
 
     $cache = $data;
-    return $data;
+    return (object) $data;
 }
 
 function proposta_field_shortcode($field) {
@@ -93,3 +131,49 @@ function proposta_register_field_shortcodes() {
     add_shortcode('proposta_custom', 'proposta_custom_field_shortcode');
 }
 add_action('init', 'proposta_register_field_shortcodes');
+
+function getPropost($tipo_proposta){
+    switch ($tipo_proposta) {
+        case 'Contabilidade':
+            return 'bloco1';
+        break;
+        case 'Assessoria na Apuração dos Tributos e Declarações':
+            return 'bloco2';
+        break;
+        case 'Gestão Financeira':
+            return 'bloco3';
+        break;
+        case 'Assessoria em Departamento Pessoal':
+            return 'bloco4';
+        break;
+        case 'Livro Caixa (Pessoa Física)':
+            return 'bloco5';
+        break;
+        case 'Assessoria Adicional':
+            return 'bloco6';
+        break;
+    }
+}
+
+function jstext()
+{
+    $data = proposta_fetch_data();
+    $formatter = new NumberFormatter('pt_BR', NumberFormatter::CURRENCY);
+    $proposta = getPropost($data->tipo_proposta);
+
+    echo "
+        <script>
+        setTimeout(function(){
+            jQuery('#nome_empresa h1').text('".$data->client_name."');
+            jQuery('#economiavalor p').text('Economize ".$formatter->formatCurrency($data->economia_por_ano, 'BRL')."/ano');
+            jQuery('.".$proposta."').show();
+        },1000);
+        </script>
+        <style>
+        .bloco1,.bloco2,.bloco3,.bloco4,.bloco5,.bloco6{
+            display:none
+        }
+        </style>
+    ";
+}
+add_action('wp_head', 'jstext');
