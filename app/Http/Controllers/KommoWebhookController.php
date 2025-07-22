@@ -36,7 +36,7 @@ class KommoWebhookController extends Controller
             $args
         );
 
-        $proposal->proposal_url = URL::to('/proposals/' . $proposal->id);
+        $proposal->proposal_url = 'https://maxxidoctor.com.br/proposta-maxxi-doctor/?proposta=' . $proposal->id;
         $proposal->save();
 
         $this->updateKommoDeal($leadsId, $proposal->proposal_url);
