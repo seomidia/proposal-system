@@ -23,8 +23,8 @@ class KommoWebhookController extends Controller
         $custom_fields =  $leads['custom_fields'];
         $args = [
                 'client_name' =>  $custom_fields[1]['values'][0]['value'] ?? null,
-                'faturamento_medio_mensal' => (float) $custom_fields[2]['values'][0]['value'] ?? null,
-                'faturamento_medio_anual' => (float) $custom_fields[3]['values'][0]['value'] ?? null,
+                'faturamento_medio_mensal' => $this->parseBrazilianFloat($custom_fields[2]['values'][0]['value']) ?? null,
+                'faturamento_medio_anual' => $this->parseBrazilianFloat($custom_fields[3]['values'][0]['value']) ?? null,
                 'quantidade_socios_contrato' => (int) $custom_fields[4]['values'][0]['value'] ?? null,
                 'tributacao_federal' => $custom_fields[5]['values'][0]['value'] ?? null,
                 'media_declaracoes_ano' => (int) $custom_fields[6]['values'][0]['value'] ?? null,
@@ -46,6 +46,12 @@ class KommoWebhookController extends Controller
         $this->updateKommoDeal($leadsId, $proposal->proposal_url);
 
         return response()->json(['url' => $proposal->proposal_url]);
+    }
+
+    public function  parseBrazilianFloat($value) {
+        // Remove o ponto de milhar e troca a vírgula por ponto
+        $value = str_replace(['.', ','], ['', '.'], $value);
+        return (float) $value;
     }
 
     protected function updateKommoDeal(int $dealId, string $url): void
