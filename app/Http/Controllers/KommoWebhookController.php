@@ -74,9 +74,7 @@ class KommoWebhookController extends Controller
     public function getToken()
     {
         $path = 'kommo_refresh_token.txt';
-        $refreshToken = Storage::disk('local')->exists($path)
-            ? trim(Storage::disk('local')->get($path))
-            : 'def502002121200e81ca89ceff67038fb149e2ddd26f8ab8771b3eb949fcc61ee7ea6b3bdc9815c594507164ba204a95261ff330d3a5ece809361ec2ac1de633c92d6e55a9101ba177ac976b06454957cafa03f9292635b8347167b498c9fde0f2a133575cffcab948b10a22ce60045d91ce7ec7db1fad35d52abb80fcea2a002d6126504e200fccf2773e5fb1fe3cf77ca50e3ae847feef2ac385addc93de3c46d140aa0f853d295c6c70ca40288c8016bd092f3ae0d67c0ae043e0fbe6f95d1428479d4adfe0c95457bc870dcc11bd8ad96de7316ca1ef0cce5cc5837785605025edcddb3c8f210e72ba31bbbd1942d49effce010c28a904807823fa46a68f3a5a2870b34583bce1b9c72c6f26c155e61535105a3239c1e9dae5a47301608c76f78fe7f5ca06ec818789db9d687949d6e5d76014dd1ec522f753e294e98c05059a377065e89a5d2501ef9c051a02da17a1c587fdf418ee4185ffbf65b17e64ab366e4a7b662bae2abd3b1cb3bb82e9ccd895b93bd603d93161fa2b36f5471649920736646d3c5b56fae334f26972dc5032d96f5b801185d593020a09b53941623c9b6f14b52d92f106fe55464aa77657ea6f7a67e8e14472ab3b72ddbe547ff1f8135b949df31a36c916ecc5a486625666a09a7fa8e92cc7402a521a4b7b10a034bc92e5c16effda0d8baa8bd0';
+        $refreshToken = trim(Storage::disk('local')->get($path));
 
         $payload = json_encode([
             'client_id' => 'be166fe1-4ae5-4929-9676-5df1fe6ff4f2',
@@ -99,8 +97,7 @@ class KommoWebhookController extends Controller
             CURLOPT_POSTFIELDS => $payload,
             CURLOPT_HTTPHEADER => [
                 'accept: application/json',
-                'content-type: application/json',
-                'Cookie: server_time=1753045890; session_id=i5epmh0r22vk2sgtrlsi5egj9e; user_lang=en',
+                'content-type: application/json'
             ],
         ]);
 
