@@ -54,7 +54,9 @@ class KommoWebhookController extends Controller
         $proposal->proposal_url = 'https://maxxidoctor.com.br/proposta-maxxi-doctor/?proposta=' . $proposal->id;
         $proposal->save();
 
-        $this->updateKommoDeal($leadsId, $proposal->proposal_url);
+        if ($proposal->wasRecentlyCreated) {
+            $this->updateKommoDeal($leadsId, $proposal->proposal_url);
+        }
 
         return response()->json(['url' => $proposal->proposal_url]);
     }
