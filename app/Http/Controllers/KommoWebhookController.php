@@ -20,18 +20,29 @@ class KommoWebhookController extends Controller
             return response()->json(['error' => 'Missing leads id'], 422);
         }
 
-        $custom_fields =  $leads['custom_fields'];
+        // Kommo sometimes returns the custom fields under the
+        // `custom_fields_values` key. Build an associative array by field
+        // id so differences in ordering between create and update payloads
+        // don't break lookups.
+        $customFields = $leads['custom_fields'] ?? $leads['custom_fields_values'] ?? [];
+        $fieldsById = [];
+        foreach ($customFields as $field) {
+            if (isset($field['id']) && isset($field['values'][0]['value'])) {
+                $fieldsById[$field['id']] = $field['values'][0]['value'];
+            }
+        }
+
         $args = [
-                'client_name' =>  $custom_fields[1]['values'][0]['value'] ?? null,
-                'faturamento_medio_mensal' => $this->parseBrazilianFloat($custom_fields[2]['values'][0]['value']) ?? null,
-                'faturamento_medio_anual' => $this->parseBrazilianFloat($custom_fields[3]['values'][0]['value']) ?? null,
-                'quantidade_socios_contrato' => (int) $custom_fields[4]['values'][0]['value'] ?? null,
-                'tributacao_federal' => $custom_fields[5]['values'][0]['value'] ?? null,
-                'media_declaracoes_ano' => (int) $custom_fields[6]['values'][0]['value'] ?? null,
-                'media_lancamentos_mes' => (int) $custom_fields[7]['values'][0]['value'] ?? [],
-                'quantos_funcionarios' => (int) $custom_fields[8]['values'][0]['value'],
-                'tipo_proposta' =>  $custom_fields[9]['values'][0]['value'],
-                'economia_por_ano' => (int) $custom_fields[10]['values'][0]['value'],
+            'client_name' => $fieldsById['796491'] ?? null,
+            'faturamento_medio_mensal' => $this->parseBrazilianFloat($fieldsById['795809'] ?? null),
+            'faturamento_medio_anual' => $this->parseBrazilianFloat($fieldsById['795811'] ?? null),
+            'quantidade_socios_contrato' => isset($fieldsById['795813']) ? (int) $fieldsById['795813'] : null,
+            'tributacao_federal' => $fieldsById['795815'] ?? null,
+            'media_declaracoes_ano' => isset($fieldsById['795817']) ? (int) $fieldsById['795817'] : null,
+            'media_lancamentos_mes' => isset($fieldsById['795819']) ? (int) $fieldsById['795819'] : null,
+            'quantos_funcionarios' => isset($fieldsById['795821']) ? (int) $fieldsById['795821'] : null,
+            'tipo_proposta' => $fieldsById['796409'] ?? null,
+            'economia_por_ano' => isset($fieldsById['796411']) ? (int) $fieldsById['796411'] : null,
         ];
 
 
@@ -49,8 +60,13 @@ class KommoWebhookController extends Controller
     }
 
     public function  parseBrazilianFloat($value) {
+        if ($value === null) {
+            return null;
+        }
+
         // Remove o ponto de milhar e troca a vírgula por ponto
         $value = str_replace(['.', ','], ['', '.'], $value);
+
         return (float) $value;
     }
 
