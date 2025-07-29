@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('media_lancamentos_mes')->nullable();
             $table->integer('quantos_funcionarios')->nullable();
             $table->string('proposal_url')->nullable();
-            $table->string('tipo_proposta')->nullable();
+            $table->json('tipo_proposta')->nullable();
             $table->string('economia_por_ano')->nullable();
             $table->timestamps();
         });

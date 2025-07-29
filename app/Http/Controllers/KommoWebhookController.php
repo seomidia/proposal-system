@@ -28,7 +28,12 @@ class KommoWebhookController extends Controller
         $fieldsById = [];
         foreach ($customFields as $field) {
             if (isset($field['id']) && isset($field['values'][0]['value'])) {
-                $fieldsById[$field['id']] = $field['values'][0]['value'];
+                $id = $field['id'];
+                if($id == "797011"){
+                    $fieldsById[$id][] = $field['values'];
+                }else{
+                    $fieldsById[$id] = $field['values'][0]['value'];
+                }
             }
         }
 
@@ -41,7 +46,7 @@ class KommoWebhookController extends Controller
             'media_declaracoes_ano' => isset($fieldsById['795817']) ? (int) $fieldsById['795817'] : null,
             'media_lancamentos_mes' => isset($fieldsById['795819']) ? (int) $fieldsById['795819'] : null,
             'quantos_funcionarios' => isset($fieldsById['795821']) ? (int) $fieldsById['795821'] : null,
-            'tipo_proposta' => $fieldsById['796409'] ?? null,
+            'tipo_proposta' => json_encode($fieldsById['797011']) ?? null,
             'economia_por_ano' => isset($fieldsById['796411']) ? (int) $fieldsById['796411'] : null,
         ];
 
@@ -53,8 +58,9 @@ class KommoWebhookController extends Controller
 
         $proposal->proposal_url = 'https://maxxidoctor.com.br/proposta-maxxi-doctor/?proposta=' . $proposal->id;
         $proposal->save();
-
-        if ($proposal->wasRecentlyCreated) {
+        $created = $proposal->wasRecentlyCreated;
+        
+        if ($created) {
             $this->updateKommoDeal($leadsId, $proposal->proposal_url);
         }
 
