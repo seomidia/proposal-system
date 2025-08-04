@@ -48,6 +48,8 @@ class KommoWebhookController extends Controller
             'quantos_funcionarios' => isset($fieldsById['795821']) ? (int) $fieldsById['795821'] : null,
             'tipo_proposta' => json_encode($fieldsById['797011']) ?? null,
             'economia_por_ano' => isset($fieldsById['796411']) ? (int) $fieldsById['796411'] : null,
+            'valor_proposta' => isset($fieldsById['797241']) ? (int) $fieldsById['797241'] : null,
+            'valor_economizado' => isset($fieldsById['797243']) ? (int) $fieldsById['797243'] : null,
         ];
 
 

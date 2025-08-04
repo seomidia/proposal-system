@@ -21,7 +21,9 @@ class Proposal extends Model
         'quantos_funcionarios',
         'proposal_url',
         'tipo_proposta',
-        'economia_por_ano'
+        'economia_por_ano',
+        'valor_proposta',
+        'valor_economizado'
     ];
 
     protected $casts = [
